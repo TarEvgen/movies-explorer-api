@@ -14,8 +14,7 @@ const getMovies = (req, res, next) => {
 const createMovies = (req, res, next) => {
   const newMoviesData = req.body;
   console.log(req, 'req')
-  const owner = '64c467413139c1bab628a3a9'
-  //req.user.id;
+  const owner = req.user.id;
   return Movies.create({
     country: newMoviesData.country,
     director: newMoviesData.director,

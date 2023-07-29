@@ -1,7 +1,14 @@
-const User = require('../models/user');
+
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+const User = require('../models/user');
 
 const saltRounds = 10;
+
+const {
+  secretJwt,
+} = require('../utils/variableEvn');
 
 const login = (req, res, next) => {
   const { email, password } = req.body;
@@ -71,11 +78,35 @@ const createUser = (req, res, next) => {
 
 
 const getUser = (req, res) => {
-  ///console.log(req, 'req.user.id getUser')
-  User.findById('64c467413139c1bab628a3a9', /*req.user._id*/).then((user) => {
+  console.log(req.user.id, 'req.user.id getUser')
+  User.findById(req.user.id).then((user) => {
     res.send(user);
   });
 };
+
+const updateUser = (req, res, next) => {
+  User.findByIdAndUpdate(req.user.id, req.body, {
+    new: true,
+    runValidators: true,
+  })
+
+    .then((user) => {
+      if (user) {
+        res.send({ data: user });
+      } else {
+        throw new NotFoundError('Пользователь не найден');
+      }
+    })
+
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BedRequest('Переданны некорректные данные'));
+        return;
+      }
+      next(err);
+    });
+};
+
 
 
 
@@ -87,5 +118,6 @@ module.exports = {
   createUser,
 
   login,
+  updateUser
 
 };
