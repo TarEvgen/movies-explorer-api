@@ -8,56 +8,56 @@ const movieSchema = new mongoose.Schema({
   },
   director: {
     type: String,
-    required: true,
+   // required: true,
   },
   duration: {
     type: Number,
-    required: true,
+   // required: true,
   },
   year: {
     type: String,
-    required: true,
+   // required: true,
   },
   description: {
     type: String,
-    required: true,
+   // required: true,
   },
   image: {
     type: String,
-    required: true,
+  //  required: true,
     validate: {
       validator: (data) => validator.isURL(data),
     },
   },
   trailerLink: {
     type: String,
-    required: true,
+   // required: true,
     validate: {
       validator: (data) => validator.isURL(data),
     },
   },
   thumbnail: {
     type: String,
-    required: true,
+   // required: true,
     validate: {
       validator: (data) => validator.isURL(data),
     },
   },
   owner: {
-    required: true,
+   // required: true,
     type: mongoose.Schema.Types.ObjectId,
   },
   movieId: {
-    required: true,
+  //  required: true,
     type: Number,
   },
   nameRU: {
     type: String,
-    required: true,
+  //  required: true,
   },
   nameEN: {
     type: String,
-    required: true,
+  //  required: true,
   },
 })
 
