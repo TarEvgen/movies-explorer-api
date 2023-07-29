@@ -4,6 +4,11 @@ const jwt = require('jsonwebtoken');
 
 const User = require('../models/user');
 
+const Unauthorized = require('../errors/unauthorized');
+const BedRequest = require('../errors/bed-request');
+const Conflict = require('../errors/conflict');
+const NotFoundError = require('../errors/not-found-err');
+
 const saltRounds = 10;
 
 const {
@@ -37,17 +42,6 @@ const login = (req, res, next) => {
     .catch((err) => next(err));
 };
 
-/*
-const getUsers = (req, res, next) => {
-  User.find({})
-    .then((users) => {
-      res.send(users);
-    })
-    .catch((err) => next(err));
-};
-
-*/
-
 const createUser = (req, res, next) => {
   const {
     email, password, name
@@ -75,7 +69,6 @@ const createUser = (req, res, next) => {
       }
     });
 };
-
 
 const getUser = (req, res) => {
   console.log(req.user.id, 'req.user.id getUser')
@@ -107,17 +100,9 @@ const updateUser = (req, res, next) => {
     });
 };
 
-
-
-
 module.exports = {
-  /*getUsers,*/
-
   getUser,
-
   createUser,
-
   login,
   updateUser
-
 };

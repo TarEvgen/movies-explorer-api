@@ -1,6 +1,8 @@
 const Movies = require('../models/movie')
 
-
+const BedRequest = require('../errors/bed-request');
+const NotFoundError = require('../errors/not-found-err');
+const Forbidden = require('../errors/forbidden');
 
 const getMovies = (req, res, next) => {
   Movies.find({})
@@ -9,7 +11,6 @@ const getMovies = (req, res, next) => {
     })
     .catch((err) => next(err));
 };
-
 
 const createMovies = (req, res, next) => {
   const newMoviesData = req.body;
@@ -23,34 +24,25 @@ const createMovies = (req, res, next) => {
     description: newMoviesData.description,
     image: newMoviesData.image,
     trailer: newMoviesData.trailer,
-
     owner: owner,
-
     nameRU: newMoviesData.nameRU,
-
     nameEN: newMoviesData.nameEN,
-
     thumbnail: newMoviesData.thumbnail,
-
     movieId: newMoviesData.movieId,
-
-
   })
     .then((newMovies) => {
       res.status(201).send(newMovies);
     })
 
-    /*
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BedRequest('Переданны не корректные данные'));
       } else {
         next(err);
       }
-    });*/
+    });
 };
 
-/////////////////////////////////
 const deleteMoviesById = (req, res, next) => {
   const { _id } = req.params;
 console.log(_id)
@@ -59,12 +51,9 @@ Movies.findById(_id)
       if (!movies) {
         throw new NotFoundError('Карточка не найдена');
       }
-      /*
       if (movies.owner.toString() !== req.user.id) {
-        throw new Forbidden('Вы не можете удалять чужие карточки');
-      } */
-
-      else {
+        throw new Forbidden('Вы не можете удалять чужие фильмы');
+      } else {
         return Movies.findByIdAndRemove(_id).then(() => {
           res.send({ messege: 'Карточка удалена' });
         });
@@ -79,14 +68,8 @@ Movies.findById(_id)
     });
 };
 
-
-///////////////////////////////////
-
-
 module.exports = {
-
   createMovies,
   getMovies,
   deleteMoviesById
-
 };
