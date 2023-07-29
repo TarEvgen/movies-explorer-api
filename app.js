@@ -3,6 +3,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
+
+const { errors } = require('celebrate');
 const app = express();
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -18,8 +20,7 @@ app.use(routes);
 
 app.use(errorLogger);
 
-//app.use(errors());
-
+app.use(errors());
 
 app.use((err, req, res, next) => {
   const { statusCode = 500, message } = err;

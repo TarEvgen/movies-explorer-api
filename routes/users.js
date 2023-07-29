@@ -5,8 +5,6 @@ const {
   updateUser
 } = require('../controllers/users');
 
-//router.get('', getUsers)
-
 router.get('/me', getUser)
 router.patch('/me', updateUser)
 

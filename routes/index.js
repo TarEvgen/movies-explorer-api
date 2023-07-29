@@ -12,8 +12,12 @@ const {
 const userRoutes = require('./users');
 const moviesRoutes = require('./movies');
 
-router.post('/signin', /* checkBodyLogin,*/ login);
-router.post('/signup', /* checkBodyLogin,*/ createUser);
+const {
+  checkBodyLogin,
+} = require('../middlewares/validation');
+
+router.post('/signin', checkBodyLogin, login);
+router.post('/signup', checkBodyLogin, createUser);
 
 
 
