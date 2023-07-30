@@ -1,17 +1,30 @@
+require('dotenv').config();
+
 const express = require('express');
 
 const bodyParser = require('body-parser');
 
 const mongoose = require('mongoose');
 
+const cors = require('cors');
+
 const { errors } = require('celebrate');
+
 const app = express();
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const routes = require('./routes');
 
-mongoose.connect('mongodb://127.0.0.1:27017/bitfilmsdb').then(() => {c=console.log('к бд подкючен')});
+app.use(cors());
+
+const {
+  dataBase,
+} = require('./utils/variableEvn');
+
+const { PORT = 3000 } = process.env;
+
+mongoose.connect(dataBase);
 app.use(bodyParser.json());
 
 app.use(requestLogger);
@@ -36,7 +49,4 @@ app.use((err, req, res, next) => {
   next();
 });
 
-
-
-
-app.listen(3000)
+app.listen(PORT, () => {});

@@ -1,4 +1,4 @@
-const Movies = require('../models/movie')
+const Movies = require('../models/movie');
 
 const BedRequest = require('../errors/bed-request');
 const NotFoundError = require('../errors/not-found-err');
@@ -14,8 +14,6 @@ const getMovies = (req, res, next) => {
 
 const createMovies = (req, res, next) => {
   const newMoviesData = req.body;
-  console.log(req, 'req')
-  const owner = req.user.id;
   return Movies.create({
     country: newMoviesData.country,
     director: newMoviesData.director,
@@ -23,8 +21,9 @@ const createMovies = (req, res, next) => {
     year: newMoviesData.year,
     description: newMoviesData.description,
     image: newMoviesData.image,
+    trailerLink: newMoviesData.trailerLink,
     trailer: newMoviesData.trailer,
-    owner: owner,
+    owner: req.user.id,
     nameRU: newMoviesData.nameRU,
     nameEN: newMoviesData.nameEN,
     thumbnail: newMoviesData.thumbnail,
@@ -33,7 +32,6 @@ const createMovies = (req, res, next) => {
     .then((newMovies) => {
       res.status(201).send(newMovies);
     })
-
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new BedRequest('Переданны не корректные данные'));
@@ -45,8 +43,7 @@ const createMovies = (req, res, next) => {
 
 const deleteMoviesById = (req, res, next) => {
   const { _id } = req.params;
-console.log(_id)
-Movies.findById(_id)
+  Movies.findById(_id)
     .then((movies) => {
       if (!movies) {
         throw new NotFoundError('Карточка не найдена');
@@ -71,5 +68,5 @@ Movies.findById(_id)
 module.exports = {
   createMovies,
   getMovies,
-  deleteMoviesById
+  deleteMoviesById,
 };

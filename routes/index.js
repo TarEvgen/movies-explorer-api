@@ -6,7 +6,7 @@ const NotFoundError = require('../errors/not-found-err');
 
 const {
   login,
-  createUser
+  createUser,
 } = require('../controllers/users');
 
 const userRoutes = require('./users');
@@ -18,9 +18,6 @@ const {
 
 router.post('/signin', checkBodyLogin, login);
 router.post('/signup', checkBodyLogin, createUser);
-
-
-
 
 router.use(auth);
 

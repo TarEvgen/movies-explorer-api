@@ -1,4 +1,3 @@
-
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
@@ -44,11 +43,11 @@ const login = (req, res, next) => {
 
 const createUser = (req, res, next) => {
   const {
-    email, password, name
+    email, password, name,
   } = req.body;
   bcrypt.hash(password, saltRounds)
     .then((hash) => User.create({
-      email, password: hash, name
+      email, password: hash, name,
     })
       .then((newUser) => {
         res.status(201).send({
@@ -71,7 +70,6 @@ const createUser = (req, res, next) => {
 };
 
 const getUser = (req, res) => {
-  console.log(req.user.id, 'req.user.id getUser')
   User.findById(req.user.id).then((user) => {
     res.send(user);
   });
@@ -104,5 +102,5 @@ module.exports = {
   getUser,
   createUser,
   login,
-  updateUser
+  updateUser,
 };
