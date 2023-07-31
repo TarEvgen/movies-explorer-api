@@ -69,10 +69,23 @@ const createUser = (req, res, next) => {
     });
 };
 
-const getUser = (req, res) => {
-  User.findById(req.user.id).then((user) => {
-    res.send(user);
-  });
+const getUser = (req, res, next) => {
+  User.findById(req.user.id)
+    .then((user) => {
+      if (user) {
+        res.send(user);
+      } else {
+        throw new NotFoundError('Пользователь не найден');
+      }
+    })
+
+    .catch((err) => {
+      if (err.name === 'CastError') {
+        next(new BedRequest('Переданны некорректные данные'));
+        return;
+      }
+      next(err);
+    });
 };
 
 const updateUser = (req, res, next) => {
@@ -90,9 +103,12 @@ const updateUser = (req, res, next) => {
     })
 
     .catch((err) => {
+      if (err.code === 11000) {
+        next(new Conflict('Нельзя обновить чужие данные'));
+        return;
+      }
       if (err.name === 'CastError') {
         next(new BedRequest('Переданны некорректные данные'));
-        return;
       }
       next(err);
     });

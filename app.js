@@ -10,6 +10,8 @@ const cors = require('cors');
 
 const { errors } = require('celebrate');
 
+const error = require('./middlewares/error');
+
 const app = express();
 
 const { requestLogger, errorLogger } = require('./middlewares/logger');
@@ -35,18 +37,6 @@ app.use(errorLogger);
 
 app.use(errors());
 
-app.use((err, req, res, next) => {
-  const { statusCode = 500, message } = err;
-
-  res
-    .status(statusCode)
-    .send({
-      message: statusCode === 500
-        ? 'На сервере произошла ошибка'
-        : message,
-    });
-
-  next();
-});
+app.use(error);
 
 app.listen(PORT, () => {});
